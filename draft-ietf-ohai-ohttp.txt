@@ -5,8 +5,8 @@
 Oblivious HTTP Application Intermediation                     M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Standards Track                              C. A. Wood
-Expires: 16 September 2023                                    Cloudflare
-                                                           15 March 2023
+Expires: 26 January 2024                                      Cloudflare
+                                                            25 July 2023
 
 
                              Oblivious HTTP
@@ -54,7 +54,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 September 2023.
+   This Internet-Draft will expire on 26 January 2024.
 
 Copyright Notice
 
@@ -475,11 +475,20 @@ Table of Contents
    The "application/ohttp-keys" format is a media type that identifies a
    serialized collection of key configurations.  The content of this
    media type comprises one or more key configuration encodings (see
-   Section 3.1) that are concatenated; see Section 9.1 for a definition
-   of the media type.
+   Section 3.1).  Each encoded configuration is prefixed with a two byte
+   integer in network byte order that indicates the length of the key
+   configuration in bytes.  The length-prefixed encodings are
+   concatenated to form a list.  See Section 9.1 for a definition of the
+   media type.
 
    Evolution of the key configuration format is supported through the
    definition of new formats that are identified by new media types.
+
+   A Client that receives an "application/ohttp-keys" object with
+   encoding errors might be able to recover one or more key
+   configurations.  Differences in how key configurations are recovered
+   might be exploited to segregate Clients, so Clients MUST discard
+   incorrectly encoded key configuration collections.
 
 4.  HPKE Encapsulation
 
@@ -1733,9 +1742,9 @@ Table of Contents
 
    [PROBLEM]  Nottingham, M., Wilde, E., and S. Dalal, "Problem Details
               for HTTP APIs", Work in Progress, Internet-Draft, draft-
-              ietf-httpapi-rfc7807bis-06, 1 March 2023,
+              ietf-httpapi-rfc7807bis-07, 28 April 2023,
               <https://datatracker.ietf.org/doc/html/draft-ietf-httpapi-
-              rfc7807bis-06>.
+              rfc7807bis-07>.
 
    [QUIC]     Iyengar, J., Ed. and M. Thomson, Ed., "QUIC: A UDP-Based
               Multiplexed and Secure Transport", RFC 9000,
@@ -1770,17 +1779,17 @@ Table of Contents
               Acer, M., Stark, E., Felt, A., Fahl, S., Bhargava, R.,
               Dev, B., Braithwaite, M., Sleevi, R., and P. Tabriz,
               "Where the Wild Warnings Are: Root Causes of Chrome HTTPS
-              Certificate Errors", Proceedings of the 2017 ACM SIGSAC
-              Conference on Computer and Communications Security,
+              Certificate Errors", ACM, Proceedings of the 2017 ACM
+              SIGSAC Conference on Computer and Communications Security,
               DOI 10.1145/3133956.3134007, October 2017,
               <https://doi.org/10.1145/3133956.3134007>.
 
    [CONSISTENCY]
               Davidson, A., Finkel, M., Thomson, M., and C. A. Wood,
               "Key Consistency and Discovery", Work in Progress,
-              Internet-Draft, draft-ietf-privacypass-key-consistency-00,
-              24 October 2022, <https://datatracker.ietf.org/doc/html/
-              draft-ietf-privacypass-key-consistency-00>.
+              Internet-Draft, draft-ietf-privacypass-key-consistency-01,
+              10 July 2023, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-privacypass-key-consistency-01>.
 
    [COOKIES]  Barth, A., "HTTP State Management Mechanism", RFC 6265,
               DOI 10.17487/RFC6265, April 2011,
@@ -2023,18 +2032,18 @@ Index
             Section 2, Paragraph 9; Section 2, Paragraph 9; Section 2.2;
             Section 2.2, Paragraph 3.2.1; Section 2.2, Paragraph 3.2.1;
             Section 3, Paragraph 1; Section 3, Paragraph 2; Section 3,
-            Paragraph 2; Section 3, Paragraph 3; Section 4.3, Paragraph
-            2, Item 3; Section 4.3, Paragraph 3; Section 4.4, Paragraph
-            6; Section 4.6, Paragraph 1; Section 5, Paragraph 1;
-            Section 5, Paragraph 2; Section 5, Paragraph 3; Section 5,
-            Paragraph 4; Section 5, Paragraph 4; Section 5, Paragraph 4;
-            Section 5, Paragraph 8; Section 5.2, Paragraph 4;
-            Section 5.2, Paragraph 4; Section 5.3, Paragraph 4;
-            Section 5.3, Paragraph 4; Section 5.3, Paragraph 4;
-            Section 5.3, Paragraph 4; Section 6, Paragraph 1; Section 6,
-            Paragraph 1; Section 6, Paragraph 2, Item 1; Section 6,
-            Paragraph 2, Item 1; Section 6, Paragraph 2, Item 1;
-            Section 6, Paragraph 2, Item 2; Section 6, Paragraph 3;
+            Paragraph 2; Section 3, Paragraph 3; Section 3.2, Paragraph
+            3; Section 4.3, Paragraph 2, Item 3; Section 4.3, Paragraph
+            3; Section 4.4, Paragraph 6; Section 4.6, Paragraph 1;
+            Section 5, Paragraph 1; Section 5, Paragraph 2; Section 5,
+            Paragraph 3; Section 5, Paragraph 4; Section 5, Paragraph 4;
+            Section 5, Paragraph 4; Section 5, Paragraph 8; Section 5.2,
+            Paragraph 4; Section 5.2, Paragraph 4; Section 5.3,
+            Paragraph 4; Section 5.3, Paragraph 4; Section 5.3,
+            Paragraph 4; Section 5.3, Paragraph 4; Section 6, Paragraph
+            1; Section 6, Paragraph 1; Section 6, Paragraph 2, Item 1;
+            Section 6, Paragraph 2, Item 1; Section 6, Paragraph 2, Item
+            1; Section 6, Paragraph 2, Item 2; Section 6, Paragraph 3;
             Section 6, Paragraph 5, Item 1; Section 6, Paragraph 7;
             Section 6, Paragraph 8; Section 6, Paragraph 10, Item 1;
             Section 6, Paragraph 10, Item 1; Section 6, Paragraph 10,
@@ -2066,6 +2075,7 @@ Index
             Appendix A, Paragraph 16; Appendix A, Paragraph 36
          Clients  Section 1, Paragraph 8; Section 2.2, Paragraph 3.8.1;
             Section 3, Paragraph 1; Section 3, Paragraph 3; Section 3,
+            Paragraph 3; Section 3.2, Paragraph 3; Section 3.2,
             Paragraph 3; Section 4.3, Paragraph 1; Section 4.4,
             Paragraph 5; Section 4.4, Paragraph 5; Section 5, Paragraph
             1; Section 5, Paragraph 2; Section 5.1, Paragraph 2;
@@ -2124,7 +2134,8 @@ Index
             1; Section 3, Paragraph 2; Section 3, Paragraph 3;
             Section 3.1, Paragraph 1; Section 3.1, Paragraph 2;
             Section 3.1, Paragraph 4; Section 3.2, Paragraph 1;
-            Section 3.2, Paragraph 2; Section 4.3, Paragraph 1;
+            Section 3.2, Paragraph 1; Section 3.2, Paragraph 2;
+            Section 3.2, Paragraph 3; Section 4.3, Paragraph 1;
             Section 4.3, Paragraph 2, Item 3; Section 5.2, Paragraph 4;
             Section 5.3, Paragraph 1; Section 5.3, Paragraph 4;
             Section 5.3, Paragraph 4; Section 6.1, Paragraph 2;
@@ -2136,7 +2147,8 @@ Index
             6; Appendix A, Paragraph 8
          key configurations  Section 3, Paragraph 2; Section 3,
             Paragraph 2; Section 3, Paragraph 3; Section 3.2, Paragraph
-            1; Section 6.1, Paragraph 3
+            1; Section 3.2, Paragraph 3; Section 3.2, Paragraph 3;
+            Section 6.1, Paragraph 3
 
       O
 
